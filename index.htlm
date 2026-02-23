@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>truyentranhgay 18+</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#fff;
+    color:#000;
+    transition:0.3s;
+}
+.dark{
+    background:#111;
+    color:#fff;
+}
+header{
+    background:#e91e63;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:white;
+}
+button{
+    padding:5px 10px;
+    cursor:pointer;
+}
+.container{
+    padding:20px;
+}
+.card{
+    border:1px solid #ccc;
+    padding:10px;
+    margin-bottom:15px;
+}
+input, select, textarea{
+    width:100%;
+    padding:5px;
+    margin:5px 0;
+}
+.hidden{
+    display:none;
+}
+nav button{
+    margin-right:5px;
+}
+.comment{
+    border-top:1px solid #ccc;
+    padding:5px;
+}
+.chat-box{
+    border:1px solid #aaa;
+    height:150px;
+    overflow:auto;
+    padding:5px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>truyentranhgay 18+</h2>
+    <div>
+        <button onclick="toggleMode()">🌙/☀</button>
+        <button onclick="showLogin()">Đăng nhập</button>
+        <button onclick="logout()">Đăng xuất</button>
+    </div>
+</header>
+
+<div class="container">
+
+<input type="text" id="search" placeholder="Tìm truyện..." onkeyup="searchStory()">
+
+<nav>
+    <button onclick="filterType('all')">Tất cả</button>
+    <button onclick="filterType('text')">Truyện chữ</button>
+    <button onclick="filterType('comic')">Truyện tranh</button>
+    <button onclick="filterType('image')">Ảnh tự do</button>
+</nav>
+
+<hr>
+
+<h3>Đăng tác phẩm</h3>
+<div id="postSection">
+    <input id="title" placeholder="Tiêu đề">
+    
+    <select id="type">
+        <option value="text">Truyện chữ</option>
+        <option value="comic">Truyện tranh</option>
+        <option value="image">Ảnh tự do</option>
+    </select>
+
+    <input id="genre" placeholder="Thể loại (VD: Hành động, Tình cảm...)">
+    <input id="country" placeholder="Quốc gia">
+    <input id="language" placeholder="Ngôn ngữ">
+    
+    <select id="translated">
+        <option value="Có dịch">Có dịch</option>
+        <option value="Chưa dịch">Chưa dịch</option>
+    </select>
+
+    <textarea id="content" placeholder="Nội dung hoặc link ảnh"></textarea>
+
+    <button onclick="addStory()">Đăng</button>
+</div>
+
+<hr>
+
+<h3>Danh sách tác phẩm</h3>
+<div id="storyList"></div>
+
+</div>
+
+<!-- Login -->
+<div id="loginBox" class="hidden">
+<div class="container">
+    <h3>Đăng nhập</h3>
+    <input id="nickname" placeholder="Biệt danh">
+    <button onclick="login()">Xác nhận</button>
+</div>
+</div>
+
+<script>
+let user=null;
+let stories=[];
+
+function toggleMode(){
+    document.body.classList.toggle("dark");
+}
+
+function showLogin(){
+    document.getElementById("loginBox").classList.toggle("hidden");
+}
+
+function login(){
+    user=document.getElementById("nickname").value;
+    alert("Xin chào "+user);
+    document.getElementById("loginBox").classList.add("hidden");
+}
+
+function logout(){
+    user=null;
+    alert("Đã đăng xuất");
+}
+
+function addStory(){
+    if(!user){
+        alert("Phải đăng nhập để đăng truyện!");
+        return;
+    }
+
+    let story={
+        title:title.value,
+        type:type.value,
+        genre:genre.value,
+        country:country.value,
+        language:language.value,
+        translated:translated.value,
+        content:content.value,
+        author:user,
+        comments:[]
+    };
+
+    stories.push(story);
+    displayStories(stories);
+}
+
+function displayStories(list){
+    let html="";
+    list.forEach((s,i)=>{
+        html+=`
+        <div class="card">
+            <h4>${s.title}</h4>
+            <p><b>Tác giả:</b> ${s.author}</p>
+            <p><b>Loại:</b> ${s.type}</p>
+            <p><b>Thể loại:</b> ${s.genre}</p>
+            <p><b>Quốc gia:</b> ${s.country}</p>
+            <p><b>Ngôn ngữ:</b> ${s.language}</p>
+            <p><b>Dịch:</b> ${s.translated}</p>
+            <p>${s.content}</p>
+            
+            <h5>Bình luận</h5>
+            <div>
+                ${s.comments.map(c=>`<div class="comment"><b>${c.user}:</b> ${c.text}</div>`).join("")}
+            </div>
+            <input id="c${i}" placeholder="Viết bình luận">
+            <button onclick="addComment(${i})">Gửi</button>
+        </div>
+        `;
+    });
+    storyList.innerHTML=html;
+}
+
+function addComment(index){
+    if(!user){
+        alert("Phải đăng nhập để bình luận!");
+        return;
+    }
+    let text=document.getElementById("c"+index).value;
+    stories[index].comments.push({user:user,text:text});
+    displayStories(stories);
+}
+
+function filterType(type){
+    if(type==="all") displayStories(stories);
+    else displayStories(stories.filter(s=>s.type===type));
+}
+
+function searchStory(){
+    let value=search.value.toLowerCase();
+    displayStories(stories.filter(s=>s.title.toLowerCase().includes(value)));
+}
+</script>
+
+</body>
+</html>
