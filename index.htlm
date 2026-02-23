@@ -52,12 +52,6 @@ nav button{
     border-top:1px solid #ccc;
     padding:5px;
 }
-.chat-box{
-    border:1px solid #aaa;
-    height:150px;
-    overflow:auto;
-    padding:5px;
-}
 </style>
 </head>
 
@@ -86,28 +80,27 @@ nav button{
 <hr>
 
 <h3>Đăng tác phẩm</h3>
-<div id="postSection">
-    <input id="title" placeholder="Tiêu đề">
-    
-    <select id="type">
-        <option value="text">Truyện chữ</option>
-        <option value="comic">Truyện tranh</option>
-        <option value="image">Ảnh tự do</option>
-    </select>
 
-    <input id="genre" placeholder="Thể loại (VD: Hành động, Tình cảm...)">
-    <input id="country" placeholder="Quốc gia">
-    <input id="language" placeholder="Ngôn ngữ">
-    
-    <select id="translated">
-        <option value="Có dịch">Có dịch</option>
-        <option value="Chưa dịch">Chưa dịch</option>
-    </select>
+<input id="title" placeholder="Tiêu đề">
 
-    <textarea id="content" placeholder="Nội dung hoặc link ảnh"></textarea>
+<select id="type">
+    <option value="text">Truyện chữ</option>
+    <option value="comic">Truyện tranh</option>
+    <option value="image">Ảnh tự do</option>
+</select>
 
-    <button onclick="addStory()">Đăng</button>
-</div>
+<input id="genre" placeholder="Thể loại">
+<input id="country" placeholder="Quốc gia">
+<input id="language" placeholder="Ngôn ngữ">
+
+<select id="translated">
+    <option value="Có dịch">Có dịch</option>
+    <option value="Chưa dịch">Chưa dịch</option>
+</select>
+
+<textarea id="content" placeholder="Nội dung hoặc link ảnh"></textarea>
+
+<button onclick="addStory()">Đăng</button>
 
 <hr>
 
@@ -155,13 +148,13 @@ function addStory(){
     }
 
     let story={
-        title:title.value,
-        type:type.value,
-        genre:genre.value,
-        country:country.value,
-        language:language.value,
-        translated:translated.value,
-        content:content.value,
+        title:document.getElementById("title").value,
+        type:document.getElementById("type").value,
+        genre:document.getElementById("genre").value,
+        country:document.getElementById("country").value,
+        language:document.getElementById("language").value,
+        translated:document.getElementById("translated").value,
+        content:document.getElementById("content").value,
         author:user,
         comments:[]
     };
@@ -185,15 +178,13 @@ function displayStories(list){
             <p>${s.content}</p>
             
             <h5>Bình luận</h5>
-            <div>
-                ${s.comments.map(c=>`<div class="comment"><b>${c.user}:</b> ${c.text}</div>`).join("")}
-            </div>
+            ${s.comments.map(c=>`<div class="comment"><b>${c.user}:</b> ${c.text}</div>`).join("")}
             <input id="c${i}" placeholder="Viết bình luận">
             <button onclick="addComment(${i})">Gửi</button>
         </div>
         `;
     });
-    storyList.innerHTML=html;
+    document.getElementById("storyList").innerHTML=html;
 }
 
 function addComment(index){
@@ -212,7 +203,7 @@ function filterType(type){
 }
 
 function searchStory(){
-    let value=search.value.toLowerCase();
+    let value=document.getElementById("search").value.toLowerCase();
     displayStories(stories.filter(s=>s.title.toLowerCase().includes(value)));
 }
 </script>
